@@ -4,7 +4,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const routes = require('./routes');
-const { sequelize} = require('./models');
+const { sequelize } = require('./models');
 
 
 // variable to enable global error logging
@@ -15,6 +15,7 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+app.use(express.json());
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
@@ -53,6 +54,9 @@ app.use((err, req, res, next) => {
     console.error('Unable to connect to the database:', error);
   }
 })();
+
+//syncs the databases
+sequelize.sync();
 
 // set our port
 app.set('port', process.env.PORT || 5000);
